@@ -1,0 +1,56 @@
+{
+  "order": {
+    "home": {
+      "title": "Orders",
+      "refreshListLabel": "Refresh List",
+      "createLabel": "Create new Order",
+      "createOrEditLabel": "Create or edit an Order",
+      "notFound": "No Orders found",
+      "filters": "Filters",
+      "search": "Search",
+      "clearFilters": "Clear",
+      "bulkDelete": "Delete"
+    },
+    "statistics": {
+      "total": "Total Orders",
+      "completed": "Completed Orders",
+      "pending": "Pending Orders",
+      "revenue": "Total Revenue"
+    },
+    "filters": {
+      "customer": "Customer ID",
+      "status": {
+        "all": "All"
+      },
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "minTotal": "Min Total",
+      "maxTotal": "Max Total"
+    },
+    "detail": {
+      "title": "Order",
+      "section": {
+        "summary": "Summary",
+        "fulfillment": "Fulfillment",
+        "metadata": "Metadata"
+      }
+    },
+    "delete": {
+      "question": "Are you sure you want to delete this Order?"
+    },
+    "actions": {
+      "viewCustomer": "View Customer"
+    },
+    "customer": "Customer",
+    "orderDate": "Order Date",
+    "totalAmount": "Total Amount",
+    "status": "Status",
+    "status.unknown": "Unknown",
+    "shippingAddress": "Shipping Address",
+    "paymentMethod": "Payment Method",
+    "notes": "Notes",
+    "createdBy": "Created By",
+    "createdDate": "Created Date"
+  }
+}
+

@@ -1,0 +1,44 @@
+{
+  "category": {
+    "home": {
+      "title": "Categories",
+      "refreshListLabel": "Refresh List",
+      "createLabel": "Create new Category",
+      "createOrEditLabel": "Create or edit a Category",
+      "notFound": "No Categories found",
+      "filters": "Filters",
+      "search": "Search",
+      "clearFilters": "Clear",
+      "bulkDelete": "Delete"
+    },
+    "statistics": {
+      "total": "Total Categories",
+      "active": "Active Categories",
+      "inactive": "Inactive Categories",
+      "withImage": "With Image"
+    },
+    "detail": {
+      "title": "Category",
+      "section": {
+        "overview": "Overview",
+        "metadata": "Metadata"
+      },
+      "noImage": "No image provided"
+    },
+    "delete": {
+      "question": "Are you sure you want to delete Category \"{{name}}\"?"
+    },
+    "name": "Name",
+    "slug": "Slug",
+    "description": "Description",
+    "active": "Active",
+    "active.true": "Active",
+    "active.false": "Inactive",
+    "createdDate": "Created Date",
+    "createdBy": "Created By",
+    "lastModifiedBy": "Last Modified By",
+    "lastModifiedDate": "Last Modified Date",
+    "imageUrl": "Image URL"
+  }
+}
+

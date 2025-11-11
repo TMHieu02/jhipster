@@ -1,0 +1,51 @@
+{
+  "customer": {
+    "home": {
+      "title": "Customers",
+      "refreshListLabel": "Refresh List",
+      "createLabel": "Create new Customer",
+      "createOrEditLabel": "Create or edit a Customer",
+      "notFound": "No Customers found",
+      "filters": "Filters",
+      "search": "Search",
+      "clearFilters": "Clear",
+      "bulkDelete": "Delete"
+    },
+    "statistics": {
+      "total": "Total Customers",
+      "active": "Active Customers",
+      "inactive": "Inactive Customers",
+      "uniqueCities": "Unique Cities"
+    },
+    "filters": {
+      "name": "Name",
+      "email": "Email"
+    },
+    "detail": {
+      "title": "Customer",
+      "section": {
+        "profile": "Profile",
+        "address": "Address",
+        "metadata": "Metadata"
+      }
+    },
+    "delete": {
+      "question": "Are you sure you want to delete Customer \"{{name}}\"?"
+    },
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "active": "Active",
+    "active.true": "Active",
+    "active.false": "Inactive",
+    "createdBy": "Created By",
+    "createdDate": "Created Date",
+    "lastModifiedBy": "Last Modified By",
+    "lastModifiedDate": "Last Modified Date"
+  }
+}
+

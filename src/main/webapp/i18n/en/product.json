@@ -1,0 +1,47 @@
+{
+  "product": {
+    "home": {
+      "title": "Products",
+      "refreshListLabel": "Refresh List",
+      "createLabel": "Create new Product",
+      "createOrEditLabel": "Create or edit a Product",
+      "notFound": "No Products found",
+      "filters": "Filters",
+      "search": "Search",
+      "clearFilters": "Clear",
+      "export": "Export"
+    },
+    "created": "Product created successfully",
+    "updated": "Product updated successfully",
+    "deleted": "Product deleted successfully",
+    "delete": {
+      "question": "Are you sure you want to delete Product \"{{name}}\"?"
+    },
+    "detail": {
+      "title": "Product",
+      "section": {
+        "overview": "Overview",
+        "metadata": "Metadata"
+      },
+      "noImage": "No image provided"
+    },
+    "actions": {
+      "viewCategory": "View Category"
+    },
+    "id": "ID",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "stockQuantity": "Stock Quantity",
+    "category": "Category",
+    "imageUrl": "Image Url",
+    "active": "Active",
+    "active.true": "Active",
+    "active.false": "Inactive",
+    "createdBy": "Created By",
+    "createdDate": "Created Date",
+    "lastModifiedBy": "Last Modified By",
+    "lastModifiedDate": "Last Modified Date"
+  }
+}
+

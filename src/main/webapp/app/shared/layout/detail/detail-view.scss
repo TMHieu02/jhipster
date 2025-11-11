@@ -1,0 +1,127 @@
+.detail-container {
+  padding: 1.5rem 0;
+}
+
+.detail-card {
+  border: none;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.detail-card__header {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.12));
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.detail-section {
+  margin-bottom: 1.5rem;
+}
+
+.detail-section:last-of-type {
+  margin-bottom: 0;
+}
+
+.detail-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bs-gray-600);
+  margin-bottom: 0.75rem;
+}
+
+.detail-info-row {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background-color: rgba(248, 250, 252, 0.7);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  margin-bottom: 0.75rem;
+}
+
+.detail-info-row:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  background-color: rgba(224, 231, 255, 0.35);
+}
+
+.detail-info-row:last-of-type {
+  margin-bottom: 0;
+}
+
+.detail-info-label {
+  color: var(--bs-gray-600);
+  letter-spacing: 0.04em;
+}
+
+.detail-info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bs-gray-900);
+}
+
+.detail-info-value p {
+  margin-bottom: 0;
+}
+
+.detail-media-card {
+  background-color: rgba(248, 250, 252, 0.8);
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.detail-media-card img {
+  max-height: 220px;
+  object-fit: contain;
+  background-color: #fff;
+  padding: 0.5rem;
+}
+
+.detail-media-caption {
+  font-size: 0.75rem;
+  color: var(--bs-gray-600);
+}
+
+.detail-media-placeholder {
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.detail-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.detail-action-button {
+  min-width: 140px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 767.98px) {
+  .detail-card__header {
+    flex-direction: column;
+  }
+
+  .detail-footer-actions {
+    justify-content: stretch;
+  }
+
+  .detail-action-button {
+    width: 100%;
+  }
+}
+
