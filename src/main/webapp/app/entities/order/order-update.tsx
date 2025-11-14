@@ -41,16 +41,26 @@ export const OrderUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    const entity = {
-      ...orderEntity,
-      ...values,
-      totalAmount: values.totalAmount !== undefined && values.totalAmount !== null ? Number(values.totalAmount) : undefined,
-      orderDate: values.orderDate ? new Date(`${values.orderDate}T00:00:00.000Z`).toISOString() : null,
-    };
-
     if (isNew) {
+      // Remove ID and other fields that shouldn't be sent when creating new entity
+      const entity = {
+        ...orderEntity,
+        ...values,
+        totalAmount: values.totalAmount !== undefined && values.totalAmount !== null ? Number(values.totalAmount) : undefined,
+        orderDate: values.orderDate ? new Date(`${values.orderDate}T00:00:00.000Z`).toISOString() : null,
+      };
+      // Remove fields that shouldn't be sent when creating
+      delete entity.id;
+      delete entity.createdDate;
+      delete entity.lastModifiedDate;
       dispatch(createEntity(entity));
     } else {
+      const entity = {
+        ...orderEntity,
+        ...values,
+        totalAmount: values.totalAmount !== undefined && values.totalAmount !== null ? Number(values.totalAmount) : undefined,
+        orderDate: values.orderDate ? new Date(`${values.orderDate}T00:00:00.000Z`).toISOString() : null,
+      };
       dispatch(updateEntity(entity));
     }
   };
@@ -83,9 +93,15 @@ export const OrderUpdate = () => {
             <p>Loading...</p>
           ) : (
             <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
-              <ValidatedField type="select" name="customerId" label={translate('order.customer')} data-cy="customer" validate={{
-                required: { value: true, message: translate('entity.validation.required') },
-              }}>
+              <ValidatedField
+                type="select"
+                name="customerId"
+                label={translate('order.customer')}
+                data-cy="customer"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              >
                 <option value="">-- Select Customer --</option>
                 {customers
                   ?.filter(cust => cust.active !== false)
@@ -117,9 +133,15 @@ export const OrderUpdate = () => {
                   min: { value: 0, message: translate('entity.validation.min', { min: 0 }) },
                 }}
               />
-              <ValidatedField type="select" name="status" label={translate('order.status')} data-cy="status" validate={{
-                required: { value: true, message: translate('entity.validation.required') },
-              }}>
+              <ValidatedField
+                type="select"
+                name="status"
+                label={translate('order.status')}
+                data-cy="status"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              >
                 {statusOptions.map(status => (
                   <option value={status} key={status}>
                     {status}
@@ -178,4 +200,3 @@ export const OrderUpdate = () => {
 };
 
 export default OrderUpdate;
-

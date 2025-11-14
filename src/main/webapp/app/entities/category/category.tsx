@@ -8,14 +8,7 @@ import { toast } from 'react-toastify';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import {
-  getEntities,
-  searchEntities,
-  updateEntity,
-  deleteEntity,
-  deleteManyEntities,
-  getStatistics,
-} from './category.reducer';
+import { getEntities, searchEntities, updateEntity, deleteEntity, deleteManyEntities, getStatistics } from './category.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { ICategory } from 'app/shared/model/category.model';
 
@@ -54,10 +47,7 @@ export const Category = () => {
       sort: `${pagination.sort},${pagination.order}`,
     };
 
-    if (
-      searchMode &&
-      (searchFilters.name.trim() !== '' || searchFilters.slug.trim() !== '' || searchFilters.active !== undefined)
-    ) {
+    if (searchMode && (searchFilters.name.trim() !== '' || searchFilters.slug.trim() !== '' || searchFilters.active !== undefined)) {
       dispatch(
         searchEntities({
           ...params,
@@ -130,7 +120,7 @@ export const Category = () => {
     setTimeout(() => getEntitiesFromProps(), 0);
   };
 
-  const formatIndex = (idx: number) => String(((pagination.activePage - 1) * pagination.itemsPerPage) + idx + 1).padStart(4, '0');
+  const formatIndex = (idx: number) => String((pagination.activePage - 1) * pagination.itemsPerPage + idx + 1).padStart(4, '0');
 
   const startEditing = (category: ICategory) => {
     setEditingId(category.id ?? null);
@@ -200,8 +190,7 @@ export const Category = () => {
     }
   };
 
-  const getCategoryDisplayName = (category: ICategory) =>
-    (category.name ?? category.slug ?? '').trim() || 'this category';
+  const getCategoryDisplayName = (category: ICategory) => (category.name ?? category.slug ?? '').trim() || 'this category';
 
   const handleDelete = async (category: ICategory) => {
     if (!category.id) {
@@ -223,42 +212,74 @@ export const Category = () => {
   return (
     <div>
       {statistics && (
-        <Row className="mb-4">
+        <Row className="mb-4 g-3">
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-primary">{statistics.totalCategories}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="tags" size="2x" className="text-primary" />
+                </div>
+                <h3 className="text-primary mb-1 fw-bold">{statistics.totalCategories}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="category.statistics.total">Total Categories</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-success">{statistics.activeCategories}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="check-circle" size="2x" className="text-success" />
+                </div>
+                <h3 className="text-success mb-1 fw-bold">{statistics.activeCategories}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="category.statistics.active">Active Categories</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-danger">{statistics.inactiveCategories}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="times-circle" size="2x" className="text-danger" />
+                </div>
+                <h3 className="text-danger mb-1 fw-bold">{statistics.inactiveCategories}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="category.statistics.inactive">Inactive Categories</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-info">{statistics.categoriesWithImage}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="image" size="2x" className="text-info" />
+                </div>
+                <h3 className="text-info mb-1 fw-bold">{statistics.categoriesWithImage}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="category.statistics.withImage">With Image</Translate>
                 </small>
               </CardBody>
@@ -267,29 +288,37 @@ export const Category = () => {
         </Row>
       )}
 
-      <h2 id="category-heading" data-cy="CategoryHeading">
-        <Translate contentKey="category.home.title">Categories</Translate>
-        <div className="d-flex justify-content-end gap-2 flex-wrap">
-          <Button color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="category.home.refreshListLabel">Refresh</Translate>
-          </Button>
-          <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
-            <FontAwesomeIcon icon="filter" /> <Translate contentKey="category.home.filters">Filters</Translate>
-          </Button>
-          {selectedIds.length > 0 && (
-            <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
-              <FontAwesomeIcon icon="trash" /> <Translate contentKey="category.home.bulkDelete">Delete</Translate> ({selectedIds.length})
-            </Button>
-          )}
-          <Link to="/category/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" /> <Translate contentKey="category.home.createLabel">Create new Category</Translate>
-          </Link>
-        </div>
-      </h2>
+      <Card className="shadow-sm border-0 mb-4" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-4">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h2 id="category-heading" data-cy="CategoryHeading" className="mb-0">
+              <FontAwesomeIcon icon="tags" className="me-2 text-primary" />
+              <Translate contentKey="category.home.title">Categories</Translate>
+            </h2>
+            <div className="d-flex justify-content-end gap-2 flex-wrap">
+              <Button color="info" onClick={handleSyncList} disabled={loading}>
+                <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="category.home.refreshListLabel">Refresh</Translate>
+              </Button>
+              <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
+                <FontAwesomeIcon icon="filter" /> <Translate contentKey="category.home.filters">Filters</Translate>
+              </Button>
+              {selectedIds.length > 0 && (
+                <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
+                  <FontAwesomeIcon icon="trash" /> <Translate contentKey="category.home.bulkDelete">Delete</Translate> ({selectedIds.length}
+                  )
+                </Button>
+              )}
+              <Link to="/category/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" /> <Translate contentKey="category.home.createLabel">Create new Category</Translate>
+              </Link>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
       <Collapse isOpen={showFilters}>
-        <Card className="mb-3">
-          <CardBody>
+        <Card className="mb-3 shadow-sm border-0" style={{ borderRadius: '12px' }}>
+          <CardBody className="p-4">
             <Row className="gy-2">
               <Col md="4">
                 <label htmlFor="searchName" className="form-label">
@@ -352,165 +381,175 @@ export const Category = () => {
         </Card>
       </Collapse>
 
-      <div className="table-responsive">
-        {categoryList && categoryList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th style={{ width: '50px' }}>
-                  <Input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    checked={selectedIds.length === categoryList.length && categoryList.length > 0}
-                  />
-                </th>
-                <th className="text-center" style={{ width: '80px' }}>
-                  STT
-                </th>
-                <th className="hand" onClick={sort('name')}>
-                  <Translate contentKey="category.name">Name</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('slug')}>
-                  <Translate contentKey="category.slug">Slug</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  <Translate contentKey="category.description">Description</Translate>
-                </th>
-                <th className="hand" onClick={sort('active')}>
-                  <Translate contentKey="category.active">Active</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('createdDate')}>
-                  <Translate contentKey="category.createdDate">Created Date</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {categoryList.map((category, i) => {
-                const isEditing = editingId === category.id;
-                return (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
+      <Card className="shadow-sm border-0" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-0">
+          <div className="table-responsive">
+            {categoryList && categoryList.length > 0 ? (
+              <Table responsive hover className="mb-0">
+                <thead>
+                  <tr>
+                    <th style={{ width: '50px' }}>
                       <Input
                         type="checkbox"
-                        checked={selectedIds.includes(category.id as string)}
-                        onChange={() => handleSelectOne(category.id as string)}
-                        disabled={isEditing}
+                        onChange={handleSelectAll}
+                        checked={selectedIds.length === categoryList.length && categoryList.length > 0}
                       />
-                    </td>
-                    <td className="text-center">{formatIndex(i)}</td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCategory?.name ?? ''}
-                          onChange={e => handleFieldChange('name', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        <Button tag={Link} to={`/category/${category.id}`} color="link" size="sm">
-                          {category.name}
-                        </Button>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCategory?.slug ?? ''}
-                          onChange={e => handleFieldChange('slug', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        category.slug
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="textarea"
-                          rows={2}
-                          value={editedCategory?.description ?? ''}
-                          onChange={e => handleFieldChange('description', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        category.description
-                      )}
-                    </td>
-                    <td className="text-center">
-                      {isEditing ? (
-                        <Input
-                          type="checkbox"
-                          checked={editedCategory?.active ?? false}
-                          onChange={e => handleFieldChange('active', e.target.checked)}
-                        />
-                      ) : category.active ? (
-                        <Badge color="success">
-                          <Translate contentKey="category.active.true">Active</Translate>
-                        </Badge>
-                      ) : (
-                        <Badge color="danger">
-                          <Translate contentKey="category.active.false">Inactive</Translate>
-                        </Badge>
-                      )}
-                    </td>
-                    <td>
-                      {category.createdDate ? <TextFormat type="date" value={category.createdDate} format={APP_DATE_FORMAT} /> : null}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group flex-btn-group-container">
-                        {isEditing ? (
-                          <>
-                            <Button color="success" size="sm" onClick={saveCategory} disabled={loading}>
-                              <FontAwesomeIcon icon="save" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.save">Save</Translate></span>
-                            </Button>
-                            <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
-                              <FontAwesomeIcon icon="times" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.cancel">Cancel</Translate></span>
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button tag={Link} to={`/category/${category.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                            </Button>
-                            <Button
-                              color="primary"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityInlineEditButton"
-                              onClick={() => startEditing(category)}
-                            >
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                            </Button>
-                            <Button
-                              color="danger"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityDeleteButton"
-                              onClick={() => void handleDelete(category)}
-                            >
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
+                    </th>
+                    <th className="text-center" style={{ width: '80px' }}>
+                      STT
+                    </th>
+                    <th className="hand" onClick={sort('name')}>
+                      <Translate contentKey="category.name">Name</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('slug')}>
+                      <Translate contentKey="category.slug">Slug</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th>
+                      <Translate contentKey="category.description">Description</Translate>
+                    </th>
+                    <th className="hand" onClick={sort('active')}>
+                      <Translate contentKey="category.active">Active</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('createdDate')}>
+                      <Translate contentKey="category.createdDate">Created Date</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th />
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="category.home.notFound">No Categories found</Translate>
-            </div>
-          )
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {categoryList.map((category, i) => {
+                    const isEditing = editingId === category.id;
+                    return (
+                      <tr key={`entity-${i}`} data-cy="entityTable">
+                        <td>
+                          <Input
+                            type="checkbox"
+                            checked={selectedIds.includes(category.id as string)}
+                            onChange={() => handleSelectOne(category.id as string)}
+                            disabled={isEditing}
+                          />
+                        </td>
+                        <td className="text-center">{formatIndex(i)}</td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCategory?.name ?? ''}
+                              onChange={e => handleFieldChange('name', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            <Button tag={Link} to={`/category/${category.id}`} color="link" size="sm">
+                              {category.name}
+                            </Button>
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCategory?.slug ?? ''}
+                              onChange={e => handleFieldChange('slug', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            category.slug
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="textarea"
+                              rows={2}
+                              value={editedCategory?.description ?? ''}
+                              onChange={e => handleFieldChange('description', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            category.description
+                          )}
+                        </td>
+                        <td className="text-center">
+                          {isEditing ? (
+                            <Input
+                              type="checkbox"
+                              checked={editedCategory?.active ?? false}
+                              onChange={e => handleFieldChange('active', e.target.checked)}
+                            />
+                          ) : category.active ? (
+                            <Badge color="success">
+                              <Translate contentKey="category.active.true">Active</Translate>
+                            </Badge>
+                          ) : (
+                            <Badge color="danger">
+                              <Translate contentKey="category.active.false">Inactive</Translate>
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {category.createdDate ? <TextFormat type="date" value={category.createdDate} format={APP_DATE_FORMAT} /> : null}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group flex-btn-group-container">
+                            {isEditing ? (
+                              <>
+                                <Button color="success" size="sm" onClick={saveCategory} disabled={loading}>
+                                  <FontAwesomeIcon icon="save" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.save">Save</Translate>
+                                  </span>
+                                </Button>
+                                <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
+                                  <FontAwesomeIcon icon="times" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.cancel">Cancel</Translate>
+                                  </span>
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button tag={Link} to={`/category/${category.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityInlineEditButton"
+                                  onClick={() => startEditing(category)}
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  color="danger"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityDeleteButton"
+                                  onClick={() => void handleDelete(category)}
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            ) : (
+              !loading && (
+                <div className="alert alert-warning m-4">
+                  <Translate contentKey="category.home.notFound">No Categories found</Translate>
+                </div>
+              )
+            )}
+          </div>
+        </CardBody>
+      </Card>
 
       {totalItems ? (
         <div className={categoryList && categoryList.length > 0 ? '' : 'd-none'}>
@@ -535,4 +574,3 @@ export const Category = () => {
 };
 
 export default Category;
-

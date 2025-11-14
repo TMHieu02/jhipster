@@ -87,7 +87,14 @@ export const Product = () => {
   }, [isSaving, updateSuccess]);
 
   const getEntitiesFromProps = () => {
-    if (searchMode && (searchFilters.name || searchFilters.categoryId || searchFilters.active !== undefined || searchFilters.minPrice || searchFilters.maxPrice)) {
+    if (
+      searchMode &&
+      (searchFilters.name ||
+        searchFilters.categoryId ||
+        searchFilters.active !== undefined ||
+        searchFilters.minPrice ||
+        searchFilters.maxPrice)
+    ) {
       dispatch(
         searchEntities({
           ...searchFilters,
@@ -206,8 +213,7 @@ export const Product = () => {
     }
   };
 
-  const getProductDisplayName = (product: IProduct) =>
-    (product.name ?? product.categoryName ?? '').trim() || 'this product';
+  const getProductDisplayName = (product: IProduct) => (product.name ?? product.categoryName ?? '').trim() || 'this product';
 
   const handleDelete = async (product: IProduct): Promise<void> => {
     if (!product.id) {
@@ -242,8 +248,7 @@ export const Product = () => {
     }
   };
 
-  const formatIndex = (idx: number) =>
-    String(((pagination.activePage - 1) * pagination.itemsPerPage) + idx + 1).padStart(4, '0');
+  const formatIndex = (idx: number) => String((pagination.activePage - 1) * pagination.itemsPerPage + idx + 1).padStart(4, '0');
 
   const startEditing = (product: IProduct) => {
     setEditingId(product.id ?? null);
@@ -267,14 +272,9 @@ export const Product = () => {
 
     const payload: IProduct = {
       ...editedProduct,
-      price:
-        editedProduct.price !== undefined && editedProduct.price !== null
-          ? Number(editedProduct.price)
-          : undefined,
+      price: editedProduct.price !== undefined && editedProduct.price !== null ? Number(editedProduct.price) : undefined,
       stockQuantity:
-        editedProduct.stockQuantity !== undefined && editedProduct.stockQuantity !== null
-          ? Number(editedProduct.stockQuantity)
-          : undefined,
+        editedProduct.stockQuantity !== undefined && editedProduct.stockQuantity !== null ? Number(editedProduct.stockQuantity) : undefined,
       active: !!editedProduct.active,
       categoryId: editedProduct.categoryId === '' ? undefined : editedProduct.categoryId,
     };
@@ -287,77 +287,120 @@ export const Product = () => {
     <div>
       {/* Statistics Cards */}
       {statistics && (
-        <Row className="mb-4">
+        <Row className="mb-4 g-3">
           <Col md="3">
-            <Card className="text-center">
-              <CardBody>
-                <h5 className="text-primary">{statistics.totalProducts}</h5>
-                <small className="text-muted">Total Products</small>
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="box" size="2x" className="text-primary" />
+                </div>
+                <h3 className="text-primary mb-1 fw-bold">{statistics.totalProducts}</h3>
+                <small className="text-muted fw-medium">Total Products</small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center">
-              <CardBody>
-                <h5 className="text-success">{statistics.activeProducts}</h5>
-                <small className="text-muted">Active Products</small>
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="check-circle" size="2x" className="text-success" />
+                </div>
+                <h3 className="text-success mb-1 fw-bold">{statistics.activeProducts}</h3>
+                <small className="text-muted fw-medium">Active Products</small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center">
-              <CardBody>
-                <h5 className="text-info">${statistics.averagePrice?.toFixed(2) || '0.00'}</h5>
-                <small className="text-muted">Average Price</small>
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="dollar-sign" size="2x" className="text-info" />
+                </div>
+                <h3 className="text-info mb-1 fw-bold">${statistics.averagePrice?.toFixed(2) || '0.00'}</h3>
+                <small className="text-muted fw-medium">Average Price</small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center">
-              <CardBody>
-                <h5 className={statistics.lowStockCount > 0 ? 'text-warning' : 'text-success'}>
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon
+                    icon="exclamation-triangle"
+                    size="2x"
+                    className={statistics.lowStockCount > 0 ? 'text-warning' : 'text-success'}
+                  />
+                </div>
+                <h3 className={statistics.lowStockCount > 0 ? 'text-warning mb-1 fw-bold' : 'text-success mb-1 fw-bold'}>
                   {statistics.lowStockCount}
-                </h5>
-                <small className="text-muted">Low Stock Items</small>
+                </h3>
+                <small className="text-muted fw-medium">Low Stock Items</small>
               </CardBody>
             </Card>
           </Col>
         </Row>
       )}
 
-      <h2 id="product-heading" data-cy="ProductHeading">
-        <Translate contentKey="product.home.title">Products</Translate>
-        <div className="d-flex justify-content-end gap-2">
-          <Button color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="product.home.refreshListLabel">Refresh</Translate>
-          </Button>
-          <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
-            <FontAwesomeIcon icon="filter" /> <Translate contentKey="product.home.filters">Filters</Translate>
-          </Button>
-          <UncontrolledDropdown>
-            <DropdownToggle color="success" caret disabled={loading}>
-              <FontAwesomeIcon icon="download" /> <Translate contentKey="product.home.export">Export</Translate>
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem onClick={() => void handleExport('txt')}>TXT</DropdownItem>
-              <DropdownItem onClick={() => void handleExport('xlsx')}>Excel (XLSX)</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          {selectedIds.length > 0 && (
-            <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
-              <FontAwesomeIcon icon="trash" /> Delete ({selectedIds.length})
-            </Button>
-          )}
-          <Link to="/product-management/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" /> <Translate contentKey="product.home.createLabel">Create new Product</Translate>
-          </Link>
-        </div>
-      </h2>
+      <Card className="shadow-sm border-0 mb-4" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-4">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h2 id="product-heading" data-cy="ProductHeading" className="mb-0">
+              <FontAwesomeIcon icon="box" className="me-2 text-primary" />
+              <Translate contentKey="product.home.title">Products</Translate>
+            </h2>
+            <div className="d-flex justify-content-end gap-2 flex-wrap">
+              <Button color="info" onClick={handleSyncList} disabled={loading}>
+                <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="product.home.refreshListLabel">Refresh</Translate>
+              </Button>
+              <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
+                <FontAwesomeIcon icon="filter" /> <Translate contentKey="product.home.filters">Filters</Translate>
+              </Button>
+              <UncontrolledDropdown>
+                <DropdownToggle color="success" caret disabled={loading}>
+                  <FontAwesomeIcon icon="download" /> <Translate contentKey="product.home.export">Export</Translate>
+                </DropdownToggle>
+                <DropdownMenu end>
+                  <DropdownItem onClick={() => void handleExport('txt')}>TXT</DropdownItem>
+                  <DropdownItem onClick={() => void handleExport('xlsx')}>Excel (XLSX)</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              {selectedIds.length > 0 && (
+                <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
+                  <FontAwesomeIcon icon="trash" /> Delete ({selectedIds.length})
+                </Button>
+              )}
+              <Link to="/product-management/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" /> <Translate contentKey="product.home.createLabel">Create new Product</Translate>
+              </Link>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
       {/* Search and Filter Form */}
       <Collapse isOpen={showFilters}>
-        <Card className="mb-3">
-          <CardBody>
+        <Card className="mb-3 shadow-sm border-0" style={{ borderRadius: '12px' }}>
+          <CardBody className="p-4">
             <Form>
               <Row>
                 <Col md="3">
@@ -425,7 +468,9 @@ export const Product = () => {
                       id="minPrice"
                       type="number"
                       value={searchFilters.minPrice || ''}
-                      onChange={e => setSearchFilters({ ...searchFilters, minPrice: e.target.value ? parseFloat(e.target.value) : undefined })}
+                      onChange={e =>
+                        setSearchFilters({ ...searchFilters, minPrice: e.target.value ? parseFloat(e.target.value) : undefined })
+                      }
                       placeholder="Min"
                     />
                   </FormGroup>
@@ -437,7 +482,9 @@ export const Product = () => {
                       id="maxPrice"
                       type="number"
                       value={searchFilters.maxPrice || ''}
-                      onChange={e => setSearchFilters({ ...searchFilters, maxPrice: e.target.value ? parseFloat(e.target.value) : undefined })}
+                      onChange={e =>
+                        setSearchFilters({ ...searchFilters, maxPrice: e.target.value ? parseFloat(e.target.value) : undefined })
+                      }
                       placeholder="Max"
                     />
                   </FormGroup>
@@ -456,220 +503,229 @@ export const Product = () => {
         </Card>
       </Collapse>
 
-      <div className="table-responsive">
-        {productList && productList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th>
-                  <Input type="checkbox" onChange={handleSelectAll} checked={selectedIds.length === productList.length && productList.length > 0} />
-                </th>
-                <th className="text-center" style={{ width: '80px' }}>
-                  STT
-                </th>
-                <th className="hand" onClick={sort('name')}>
-                  <Translate contentKey="product.name">Name</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('description')}>
-                  <Translate contentKey="product.description">Description</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('price')}>
-                  <Translate contentKey="product.price">Price</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('stockQuantity')}>
-                  <Translate contentKey="product.stockQuantity">Stock Quantity</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('categoryId')}>
-                  <Translate contentKey="product.category">Category</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('active')}>
-                  <Translate contentKey="product.active">Active</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('createdDate')}>
-                  <Translate contentKey="product.createdDate">Created Date</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {productList.map((product, i) => {
-                const isEditing = editingId === product.id;
-                return (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
+      <Card className="shadow-sm border-0" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-0">
+          <div className="table-responsive">
+            {productList && productList.length > 0 ? (
+              <Table responsive hover className="mb-0">
+                <thead>
+                  <tr>
+                    <th>
                       <Input
                         type="checkbox"
-                        checked={selectedIds.includes(product.id as string)}
-                        onChange={() => handleSelectOne(product.id as string)}
-                        disabled={isEditing}
+                        onChange={handleSelectAll}
+                        checked={selectedIds.length === productList.length && productList.length > 0}
                       />
-                    </td>
-                    <td className="text-center">{formatIndex(i)}</td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedProduct?.name ?? ''}
-                          onChange={e => handleProductFieldChange('name', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        product.name
-                      )}
-                    </td>
-                    <td className="w-25">
-                      {isEditing ? (
-                        <Input
-                          type="textarea"
-                          value={editedProduct?.description ?? ''}
-                          onChange={e => handleProductFieldChange('description', e.target.value)}
-                          bsSize="sm"
-                          rows={2}
-                        />
-                      ) : (
-                        product.description
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={editedProduct?.price ?? ''}
-                          onChange={e =>
-                            handleProductFieldChange('price', e.target.value === '' ? undefined : Number(e.target.value))
-                          }
-                          bsSize="sm"
-                        />
-                      ) : product.price !== undefined && product.price !== null ? (
-                        `$${product.price.toFixed(2)}`
-                      ) : null}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="number"
-                          value={editedProduct?.stockQuantity ?? ''}
-                          onChange={e =>
-                            handleProductFieldChange(
-                              'stockQuantity',
-                              e.target.value === '' ? undefined : Number(e.target.value)
-                            )
-                          }
-                          bsSize="sm"
-                        />
-                      ) : (
-                        <Badge color={product.stockQuantity && product.stockQuantity < 10 ? 'warning' : 'success'}>
-                          {product.stockQuantity}
-                        </Badge>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="select"
-                          value={editedProduct?.categoryId ?? ''}
-                          onChange={e => handleProductFieldChange('categoryId', e.target.value)}
-                          bsSize="sm"
-                        >
-                          <option value="">-- Select --</option>
-                          {categories
-                            ?.filter(cat => cat.active !== false)
-                            .map(category => (
-                              <option value={category.id} key={category.id}>
-                                {category.name}
-                              </option>
-                            ))}
-                        </Input>
-                      ) : product.categoryName ? (
-                        product.categoryName
-                      ) : product.categoryId ? (
-                        <Button tag={Link} to={`/category/${product.categoryId}`} color="link" size="sm">
-                          <Translate contentKey="product.actions.viewCategory">View Category</Translate>
-                        </Button>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="checkbox"
-                          checked={editedProduct?.active ?? false}
-                          onChange={e => handleProductFieldChange('active', e.target.checked)}
-                        />
-                      ) : product.active ? (
-                        <Badge color="success">
-                          <Translate contentKey="product.active.true">Active</Translate>
-                        </Badge>
-                      ) : (
-                        <Badge color="danger">
-                          <Translate contentKey="product.active.false">Inactive</Translate>
-                        </Badge>
-                      )}
-                    </td>
-                    <td>
-                      {product.createdDate ? <TextFormat type="date" value={product.createdDate} format={APP_DATE_FORMAT} /> : null}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group flex-btn-group-container">
-                        {isEditing ? (
-                          <>
-                            <Button color="success" size="sm" onClick={saveProduct} disabled={loading}>
-                              <FontAwesomeIcon icon="save" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.save">Save</Translate></span>
-                            </Button>
-                            <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
-                              <FontAwesomeIcon icon="times" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.cancel">Cancel</Translate></span>
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button
-                              tag={Link}
-                              to={`/product-management/${product.id}`}
-                              color="info"
-                              size="sm"
-                              data-cy="entityDetailsButton"
-                            >
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                            </Button>
-                            <Button
-                              color="primary"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityInlineEditButton"
-                              onClick={() => startEditing(product)}
-                            >
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                            </Button>
-                            <Button
-                              color="danger"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityDeleteButton"
-                              onClick={() => void handleDelete(product)}
-                            >
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
+                    </th>
+                    <th className="text-center" style={{ width: '80px' }}>
+                      STT
+                    </th>
+                    <th className="hand" onClick={sort('name')}>
+                      <Translate contentKey="product.name">Name</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('description')}>
+                      <Translate contentKey="product.description">Description</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('price')}>
+                      <Translate contentKey="product.price">Price</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('stockQuantity')}>
+                      <Translate contentKey="product.stockQuantity">Stock Quantity</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('categoryId')}>
+                      <Translate contentKey="product.category">Category</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('active')}>
+                      <Translate contentKey="product.active">Active</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('createdDate')}>
+                      <Translate contentKey="product.createdDate">Created Date</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th />
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="product.home.notFound">No Products found</Translate>
-            </div>
-          )
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {productList.map((product, i) => {
+                    const isEditing = editingId === product.id;
+                    return (
+                      <tr key={`entity-${i}`} data-cy="entityTable">
+                        <td>
+                          <Input
+                            type="checkbox"
+                            checked={selectedIds.includes(product.id as string)}
+                            onChange={() => handleSelectOne(product.id as string)}
+                            disabled={isEditing}
+                          />
+                        </td>
+                        <td className="text-center">{formatIndex(i)}</td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedProduct?.name ?? ''}
+                              onChange={e => handleProductFieldChange('name', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            product.name
+                          )}
+                        </td>
+                        <td className="w-25">
+                          {isEditing ? (
+                            <Input
+                              type="textarea"
+                              value={editedProduct?.description ?? ''}
+                              onChange={e => handleProductFieldChange('description', e.target.value)}
+                              bsSize="sm"
+                              rows={2}
+                            />
+                          ) : (
+                            product.description
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="number"
+                              step="0.01"
+                              value={editedProduct?.price ?? ''}
+                              onChange={e => handleProductFieldChange('price', e.target.value === '' ? undefined : Number(e.target.value))}
+                              bsSize="sm"
+                            />
+                          ) : product.price !== undefined && product.price !== null ? (
+                            `$${product.price.toFixed(2)}`
+                          ) : null}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="number"
+                              value={editedProduct?.stockQuantity ?? ''}
+                              onChange={e =>
+                                handleProductFieldChange('stockQuantity', e.target.value === '' ? undefined : Number(e.target.value))
+                              }
+                              bsSize="sm"
+                            />
+                          ) : (
+                            <Badge color={product.stockQuantity && product.stockQuantity < 10 ? 'warning' : 'success'}>
+                              {product.stockQuantity}
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="select"
+                              value={editedProduct?.categoryId ?? ''}
+                              onChange={e => handleProductFieldChange('categoryId', e.target.value)}
+                              bsSize="sm"
+                            >
+                              <option value="">-- Select --</option>
+                              {categories
+                                ?.filter(cat => cat.active !== false)
+                                .map(category => (
+                                  <option value={category.id} key={category.id}>
+                                    {category.name}
+                                  </option>
+                                ))}
+                            </Input>
+                          ) : product.categoryName ? (
+                            product.categoryName
+                          ) : product.categoryId ? (
+                            <Button tag={Link} to={`/category/${product.categoryId}`} color="link" size="sm">
+                              <Translate contentKey="product.actions.viewCategory">View Category</Translate>
+                            </Button>
+                          ) : (
+                            '—'
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="checkbox"
+                              checked={editedProduct?.active ?? false}
+                              onChange={e => handleProductFieldChange('active', e.target.checked)}
+                            />
+                          ) : product.active ? (
+                            <Badge color="success">
+                              <Translate contentKey="product.active.true">Active</Translate>
+                            </Badge>
+                          ) : (
+                            <Badge color="danger">
+                              <Translate contentKey="product.active.false">Inactive</Translate>
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {product.createdDate ? <TextFormat type="date" value={product.createdDate} format={APP_DATE_FORMAT} /> : null}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group flex-btn-group-container">
+                            {isEditing ? (
+                              <>
+                                <Button color="success" size="sm" onClick={saveProduct} disabled={loading}>
+                                  <FontAwesomeIcon icon="save" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.save">Save</Translate>
+                                  </span>
+                                </Button>
+                                <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
+                                  <FontAwesomeIcon icon="times" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.cancel">Cancel</Translate>
+                                  </span>
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button
+                                  tag={Link}
+                                  to={`/product-management/${product.id}`}
+                                  color="info"
+                                  size="sm"
+                                  data-cy="entityDetailsButton"
+                                >
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityInlineEditButton"
+                                  onClick={() => startEditing(product)}
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  color="danger"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityDeleteButton"
+                                  onClick={() => void handleDelete(product)}
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            ) : (
+              !loading && (
+                <div className="alert alert-warning m-4">
+                  <Translate contentKey="product.home.notFound">No Products found</Translate>
+                </div>
+              )
+            )}
+          </div>
+        </CardBody>
+      </Card>
       {totalItems ? (
         <div className={productList && productList.length > 0 ? '' : 'd-none'}>
           <div className="justify-content-center d-flex">

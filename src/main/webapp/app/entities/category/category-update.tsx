@@ -37,14 +37,22 @@ export const CategoryUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    const entity = {
-      ...categoryEntity,
-      ...values,
-    };
-
     if (isNew) {
+      // Remove ID and other fields that shouldn't be sent when creating new entity
+      const entity = {
+        ...categoryEntity,
+        ...values,
+      };
+      // Remove fields that shouldn't be sent when creating
+      delete entity.id;
+      delete entity.createdDate;
+      delete entity.lastModifiedDate;
       dispatch(createEntity(entity));
     } else {
+      const entity = {
+        ...categoryEntity,
+        ...values,
+      };
       dispatch(updateEntity(entity));
     }
   };
@@ -114,7 +122,14 @@ export const CategoryUpdate = () => {
                   maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
                 }}
               />
-              <ValidatedField label={translate('category.active')} id="category-active" name="active" data-cy="active" check type="checkbox" />
+              <ValidatedField
+                label={translate('category.active')}
+                id="category-active"
+                name="active"
+                data-cy="active"
+                check
+                type="checkbox"
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/category" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -137,4 +152,3 @@ export const CategoryUpdate = () => {
 };
 
 export default CategoryUpdate;
-

@@ -43,18 +43,28 @@ export const ProductUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    const entity = {
-      ...productEntity,
-      ...values,
-      price: values.price !== undefined && values.price !== null ? Number(values.price) : undefined,
-      stockQuantity:
-        values.stockQuantity !== undefined && values.stockQuantity !== null ? Number(values.stockQuantity) : undefined,
-      active: !!values.active,
-    };
-
     if (isNew) {
+      // Remove ID and other fields that shouldn't be sent when creating new entity
+      const entity = {
+        ...productEntity,
+        ...values,
+        price: values.price !== undefined && values.price !== null ? Number(values.price) : undefined,
+        stockQuantity: values.stockQuantity !== undefined && values.stockQuantity !== null ? Number(values.stockQuantity) : undefined,
+        active: !!values.active,
+      };
+      // Remove fields that shouldn't be sent when creating
+      delete entity.id;
+      delete entity.createdDate;
+      delete entity.lastModifiedDate;
       dispatch(createEntity(entity));
     } else {
+      const entity = {
+        ...productEntity,
+        ...values,
+        price: values.price !== undefined && values.price !== null ? Number(values.price) : undefined,
+        stockQuantity: values.stockQuantity !== undefined && values.stockQuantity !== null ? Number(values.stockQuantity) : undefined,
+        active: !!values.active,
+      };
       dispatch(updateEntity(entity));
     }
   };
@@ -147,7 +157,14 @@ export const ProductUpdate = () => {
                   maxLength: { value: 255, message: translate('entity.validation.maxlength', { max: 255 }) },
                 }}
               />
-              <ValidatedField label={translate('product.active')} id="product-active" name="active" data-cy="active" check type="checkbox" />
+              <ValidatedField
+                label={translate('product.active')}
+                id="product-active"
+                name="active"
+                data-cy="active"
+                check
+                type="checkbox"
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/product-management" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -170,4 +187,3 @@ export const ProductUpdate = () => {
 };
 
 export default ProductUpdate;
-

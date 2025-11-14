@@ -7,14 +7,7 @@ import { toast } from 'react-toastify';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import {
-  getEntities,
-  searchEntities,
-  updateEntity,
-  deleteEntity,
-  deleteManyEntities,
-  getStatistics,
-} from './customer.reducer';
+import { getEntities, searchEntities, updateEntity, deleteEntity, deleteManyEntities, getStatistics } from './customer.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { ICustomer } from 'app/shared/model/customer.model';
 
@@ -137,7 +130,7 @@ export const Customer = () => {
     setTimeout(() => getEntitiesFromProps(), 0);
   };
 
-  const formatIndex = (idx: number) => String(((pagination.activePage - 1) * pagination.itemsPerPage) + idx + 1).padStart(4, '0');
+  const formatIndex = (idx: number) => String((pagination.activePage - 1) * pagination.itemsPerPage + idx + 1).padStart(4, '0');
 
   const startEditing = (customer: ICustomer) => {
     setEditingId(customer.id ?? null);
@@ -228,42 +221,74 @@ export const Customer = () => {
   return (
     <div>
       {statistics && (
-        <Row className="mb-4">
+        <Row className="mb-4 g-3">
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-primary">{statistics.totalCustomers}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="user-friends" size="2x" className="text-primary" />
+                </div>
+                <h3 className="text-primary mb-1 fw-bold">{statistics.totalCustomers}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="customer.statistics.total">Total Customers</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-success">{statistics.activeCustomers}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="check-circle" size="2x" className="text-success" />
+                </div>
+                <h3 className="text-success mb-1 fw-bold">{statistics.activeCustomers}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="customer.statistics.active">Active Customers</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-danger">{statistics.inactiveCustomers}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="times-circle" size="2x" className="text-danger" />
+                </div>
+                <h3 className="text-danger mb-1 fw-bold">{statistics.inactiveCustomers}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="customer.statistics.inactive">Inactive Customers</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-info">{statistics.uniqueCities}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="map-marker-alt" size="2x" className="text-info" />
+                </div>
+                <h3 className="text-info mb-1 fw-bold">{statistics.uniqueCities}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="customer.statistics.uniqueCities">Unique Cities</Translate>
                 </small>
               </CardBody>
@@ -272,29 +297,38 @@ export const Customer = () => {
         </Row>
       )}
 
-      <h2 id="customer-heading" data-cy="CustomerHeading">
-        <Translate contentKey="customer.home.title">Customers</Translate>
-        <div className="d-flex justify-content-end gap-2 flex-wrap">
-          <Button color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="customer.home.refreshListLabel">Refresh List</Translate>
-          </Button>
-          <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
-            <FontAwesomeIcon icon="filter" /> <Translate contentKey="customer.home.filters">Filters</Translate>
-          </Button>
-          {selectedIds.length > 0 && (
-            <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
-              <FontAwesomeIcon icon="trash" /> <Translate contentKey="customer.home.bulkDelete">Delete</Translate> ({selectedIds.length})
-            </Button>
-          )}
-          <Link to="/customer/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" /> <Translate contentKey="customer.home.createLabel">Create new Customer</Translate>
-          </Link>
-        </div>
-      </h2>
+      <Card className="shadow-sm border-0 mb-4" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-4">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h2 id="customer-heading" data-cy="CustomerHeading" className="mb-0">
+              <FontAwesomeIcon icon="user-friends" className="me-2 text-primary" />
+              <Translate contentKey="customer.home.title">Customers</Translate>
+            </h2>
+            <div className="d-flex justify-content-end gap-2 flex-wrap">
+              <Button color="info" onClick={handleSyncList} disabled={loading}>
+                <FontAwesomeIcon icon="sync" spin={loading} />{' '}
+                <Translate contentKey="customer.home.refreshListLabel">Refresh List</Translate>
+              </Button>
+              <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
+                <FontAwesomeIcon icon="filter" /> <Translate contentKey="customer.home.filters">Filters</Translate>
+              </Button>
+              {selectedIds.length > 0 && (
+                <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
+                  <FontAwesomeIcon icon="trash" /> <Translate contentKey="customer.home.bulkDelete">Delete</Translate> ({selectedIds.length}
+                  )
+                </Button>
+              )}
+              <Link to="/customer/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" /> <Translate contentKey="customer.home.createLabel">Create new Customer</Translate>
+              </Link>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
       <Collapse isOpen={showFilters}>
-        <Card className="mb-3">
-          <CardBody>
+        <Card className="mb-3 shadow-sm border-0" style={{ borderRadius: '12px' }}>
+          <CardBody className="p-4">
             <Row className="gy-2">
               <Col md="3">
                 <label htmlFor="searchName" className="form-label">
@@ -381,188 +415,198 @@ export const Customer = () => {
         </Card>
       </Collapse>
 
-      <div className="table-responsive">
-        {customerList && customerList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th style={{ width: '50px' }}>
-                  <Input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    checked={selectedIds.length === customerList.length && customerList.length > 0}
-                  />
-                </th>
-                <th className="text-center" style={{ width: '80px' }}>
-                  STT
-                </th>
-                <th className="hand" onClick={sort('firstName')}>
-                  <Translate contentKey="customer.firstName">First Name</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('lastName')}>
-                  <Translate contentKey="customer.lastName">Last Name</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('email')}>
-                  <Translate contentKey="customer.email">Email</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('phone')}>
-                  <Translate contentKey="customer.phone">Phone</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('city')}>
-                  <Translate contentKey="customer.city">City</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('active')}>
-                  <Translate contentKey="customer.active">Active</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {customerList.map((customer, i) => {
-                const isEditing = editingId === customer.id;
-                return (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
+      <Card className="shadow-sm border-0" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-0">
+          <div className="table-responsive">
+            {customerList && customerList.length > 0 ? (
+              <Table responsive hover className="mb-0">
+                <thead>
+                  <tr>
+                    <th style={{ width: '50px' }}>
                       <Input
                         type="checkbox"
-                        checked={selectedIds.includes(customer.id as string)}
-                        onChange={() => handleSelectOne(customer.id as string)}
-                        disabled={isEditing}
+                        onChange={handleSelectAll}
+                        checked={selectedIds.length === customerList.length && customerList.length > 0}
                       />
-                    </td>
-                    <td className="text-center">{formatIndex(i)}</td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCustomer?.firstName ?? ''}
-                          onChange={e => handleFieldChange('firstName', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        <Button tag={Link} to={`/customer/${customer.id}`} color="link" size="sm">
-                          {customer.firstName}
-                        </Button>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCustomer?.lastName ?? ''}
-                          onChange={e => handleFieldChange('lastName', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        customer.lastName
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="email"
-                          value={editedCustomer?.email ?? ''}
-                          onChange={e => handleFieldChange('email', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        customer.email
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCustomer?.phone ?? ''}
-                          onChange={e => handleFieldChange('phone', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        customer.phone
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedCustomer?.city ?? ''}
-                          onChange={e => handleFieldChange('city', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        customer.city
-                      )}
-                    </td>
-                    <td className="text-center">
-                      {isEditing ? (
-                        <Input
-                          type="checkbox"
-                          checked={editedCustomer?.active ?? false}
-                          onChange={e => handleFieldChange('active', e.target.checked)}
-                        />
-                      ) : customer.active ? (
-                        <Badge color="success">
-                          <Translate contentKey="customer.active.true">Active</Translate>
-                        </Badge>
-                      ) : (
-                        <Badge color="danger">
-                          <Translate contentKey="customer.active.false">Inactive</Translate>
-                        </Badge>
-                      )}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group flex-btn-group-container">
-                        {isEditing ? (
-                          <>
-                            <Button color="success" size="sm" onClick={saveCustomer} disabled={loading}>
-                              <FontAwesomeIcon icon="save" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.save">Save</Translate></span>
-                            </Button>
-                            <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
-                              <FontAwesomeIcon icon="times" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.cancel">Cancel</Translate></span>
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button tag={Link} to={`/customer/${customer.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                            </Button>
-                            <Button
-                              color="primary"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityInlineEditButton"
-                              onClick={() => startEditing(customer)}
-                            >
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                            </Button>
-                            <Button
-                              color="danger"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityDeleteButton"
-                              onClick={() => void handleDelete(customer)}
-                            >
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
+                    </th>
+                    <th className="text-center" style={{ width: '80px' }}>
+                      STT
+                    </th>
+                    <th className="hand" onClick={sort('firstName')}>
+                      <Translate contentKey="customer.firstName">First Name</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('lastName')}>
+                      <Translate contentKey="customer.lastName">Last Name</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('email')}>
+                      <Translate contentKey="customer.email">Email</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('phone')}>
+                      <Translate contentKey="customer.phone">Phone</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('city')}>
+                      <Translate contentKey="customer.city">City</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('active')}>
+                      <Translate contentKey="customer.active">Active</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th />
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="customer.home.notFound">No Customers found</Translate>
-            </div>
-          )
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {customerList.map((customer, i) => {
+                    const isEditing = editingId === customer.id;
+                    return (
+                      <tr key={`entity-${i}`} data-cy="entityTable">
+                        <td>
+                          <Input
+                            type="checkbox"
+                            checked={selectedIds.includes(customer.id as string)}
+                            onChange={() => handleSelectOne(customer.id as string)}
+                            disabled={isEditing}
+                          />
+                        </td>
+                        <td className="text-center">{formatIndex(i)}</td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCustomer?.firstName ?? ''}
+                              onChange={e => handleFieldChange('firstName', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            <Button tag={Link} to={`/customer/${customer.id}`} color="link" size="sm">
+                              {customer.firstName}
+                            </Button>
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCustomer?.lastName ?? ''}
+                              onChange={e => handleFieldChange('lastName', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            customer.lastName
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="email"
+                              value={editedCustomer?.email ?? ''}
+                              onChange={e => handleFieldChange('email', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            customer.email
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCustomer?.phone ?? ''}
+                              onChange={e => handleFieldChange('phone', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            customer.phone
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedCustomer?.city ?? ''}
+                              onChange={e => handleFieldChange('city', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            customer.city
+                          )}
+                        </td>
+                        <td className="text-center">
+                          {isEditing ? (
+                            <Input
+                              type="checkbox"
+                              checked={editedCustomer?.active ?? false}
+                              onChange={e => handleFieldChange('active', e.target.checked)}
+                            />
+                          ) : customer.active ? (
+                            <Badge color="success">
+                              <Translate contentKey="customer.active.true">Active</Translate>
+                            </Badge>
+                          ) : (
+                            <Badge color="danger">
+                              <Translate contentKey="customer.active.false">Inactive</Translate>
+                            </Badge>
+                          )}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group flex-btn-group-container">
+                            {isEditing ? (
+                              <>
+                                <Button color="success" size="sm" onClick={saveCustomer} disabled={loading}>
+                                  <FontAwesomeIcon icon="save" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.save">Save</Translate>
+                                  </span>
+                                </Button>
+                                <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
+                                  <FontAwesomeIcon icon="times" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.cancel">Cancel</Translate>
+                                  </span>
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button tag={Link} to={`/customer/${customer.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityInlineEditButton"
+                                  onClick={() => startEditing(customer)}
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  color="danger"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityDeleteButton"
+                                  onClick={() => void handleDelete(customer)}
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            ) : (
+              !loading && (
+                <div className="alert alert-warning m-4">
+                  <Translate contentKey="customer.home.notFound">No Customers found</Translate>
+                </div>
+              )
+            )}
+          </div>
+        </CardBody>
+      </Card>
 
       {totalItems ? (
         <div className={customerList && customerList.length > 0 ? '' : 'd-none'}>

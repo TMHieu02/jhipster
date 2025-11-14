@@ -8,14 +8,7 @@ import { toast } from 'react-toastify';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
-import {
-  getEntities,
-  searchEntities,
-  updateEntity,
-  deleteEntity,
-  deleteManyEntities,
-  getStatistics,
-} from './order.reducer';
+import { getEntities, searchEntities, updateEntity, deleteEntity, deleteManyEntities, getStatistics } from './order.reducer';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IOrder } from 'app/shared/model/order.model';
 
@@ -153,13 +146,21 @@ export const Order = () => {
   };
 
   const handleClearFilters = () => {
-    setSearchFilters({ customerId: '', status: '', paymentMethod: '', startDate: '', endDate: '', minTotal: undefined, maxTotal: undefined });
+    setSearchFilters({
+      customerId: '',
+      status: '',
+      paymentMethod: '',
+      startDate: '',
+      endDate: '',
+      minTotal: undefined,
+      maxTotal: undefined,
+    });
     setSearchMode(false);
     setPagination(prev => ({ ...prev, activePage: 1 }));
     setTimeout(() => getEntitiesFromProps(), 0);
   };
 
-  const formatIndex = (idx: number) => String(((pagination.activePage - 1) * pagination.itemsPerPage) + idx + 1).padStart(4, '0');
+  const formatIndex = (idx: number) => String((pagination.activePage - 1) * pagination.itemsPerPage + idx + 1).padStart(4, '0');
 
   const startEditing = (order: IOrder) => {
     setEditingId(order.id ?? null);
@@ -300,42 +301,74 @@ export const Order = () => {
   return (
     <div>
       {statistics && (
-        <Row className="mb-4">
+        <Row className="mb-4 g-3">
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-primary">{statistics.totalOrders}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="shopping-cart" size="2x" className="text-primary" />
+                </div>
+                <h3 className="text-primary mb-1 fw-bold">{statistics.totalOrders}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="order.statistics.total">Total Orders</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-success">{statistics.completedOrders}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="check-circle" size="2x" className="text-success" />
+                </div>
+                <h3 className="text-success mb-1 fw-bold">{statistics.completedOrders}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="order.statistics.completed">Completed Orders</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-warning">{statistics.pendingOrders}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="clock" size="2x" className="text-warning" />
+                </div>
+                <h3 className="text-warning mb-1 fw-bold">{statistics.pendingOrders}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="order.statistics.pending">Pending Orders</Translate>
                 </small>
               </CardBody>
             </Card>
           </Col>
           <Col md="3">
-            <Card className="text-center shadow-sm">
-              <CardBody>
-                <h5 className="text-info">${Number(statistics.totalRevenue || 0).toFixed(2)}</h5>
-                <small className="text-muted">
+            <Card
+              className="text-center shadow-sm border-0"
+              style={{ borderRadius: '12px', transition: 'transform 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-5px)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+            >
+              <CardBody className="p-4">
+                <div className="mb-2">
+                  <FontAwesomeIcon icon="dollar-sign" size="2x" className="text-info" />
+                </div>
+                <h3 className="text-info mb-1 fw-bold">${Number(statistics.totalRevenue || 0).toFixed(2)}</h3>
+                <small className="text-muted fw-medium">
                   <Translate contentKey="order.statistics.revenue">Total Revenue</Translate>
                 </small>
               </CardBody>
@@ -344,29 +377,36 @@ export const Order = () => {
         </Row>
       )}
 
-      <h2 id="order-heading" data-cy="OrderHeading">
-        <Translate contentKey="order.home.title">Orders</Translate>
-        <div className="d-flex justify-content-end gap-2 flex-wrap">
-          <Button color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="order.home.refreshListLabel">Refresh List</Translate>
-          </Button>
-          <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
-            <FontAwesomeIcon icon="filter" /> <Translate contentKey="order.home.filters">Filters</Translate>
-          </Button>
-          {selectedIds.length > 0 && (
-            <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
-              <FontAwesomeIcon icon="trash" /> <Translate contentKey="order.home.bulkDelete">Delete</Translate> ({selectedIds.length})
-            </Button>
-          )}
-          <Link to="/order/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
-            <FontAwesomeIcon icon="plus" /> <Translate contentKey="order.home.createLabel">Create new Order</Translate>
-          </Link>
-        </div>
-      </h2>
+      <Card className="shadow-sm border-0 mb-4" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-4">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h2 id="order-heading" data-cy="OrderHeading" className="mb-0">
+              <FontAwesomeIcon icon="shopping-cart" className="me-2 text-primary" />
+              <Translate contentKey="order.home.title">Orders</Translate>
+            </h2>
+            <div className="d-flex justify-content-end gap-2 flex-wrap">
+              <Button color="info" onClick={handleSyncList} disabled={loading}>
+                <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="order.home.refreshListLabel">Refresh List</Translate>
+              </Button>
+              <Button color="secondary" onClick={() => setShowFilters(!showFilters)}>
+                <FontAwesomeIcon icon="filter" /> <Translate contentKey="order.home.filters">Filters</Translate>
+              </Button>
+              {selectedIds.length > 0 && (
+                <Button color="danger" onClick={() => void handleBulkDelete()} disabled={loading}>
+                  <FontAwesomeIcon icon="trash" /> <Translate contentKey="order.home.bulkDelete">Delete</Translate> ({selectedIds.length})
+                </Button>
+              )}
+              <Link to="/order/new" className="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
+                <FontAwesomeIcon icon="plus" /> <Translate contentKey="order.home.createLabel">Create new Order</Translate>
+              </Link>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
       <Collapse isOpen={showFilters}>
-        <Card className="mb-3">
-          <CardBody>
+        <Card className="mb-3 shadow-sm border-0" style={{ borderRadius: '12px' }}>
+          <CardBody className="p-4">
             <Row className="gy-2">
               <Col md="4">
                 <label htmlFor="searchCustomer" className="form-label">
@@ -442,9 +482,7 @@ export const Order = () => {
                   id="minTotal"
                   type="number"
                   value={searchFilters.minTotal ?? ''}
-                  onChange={e =>
-                    setSearchFilters(prev => ({ ...prev, minTotal: e.target.value ? Number(e.target.value) : undefined }))
-                  }
+                  onChange={e => setSearchFilters(prev => ({ ...prev, minTotal: e.target.value ? Number(e.target.value) : undefined }))}
                   placeholder="Min"
                 />
               </Col>
@@ -456,9 +494,7 @@ export const Order = () => {
                   id="maxTotal"
                   type="number"
                   value={searchFilters.maxTotal ?? ''}
-                  onChange={e =>
-                    setSearchFilters(prev => ({ ...prev, maxTotal: e.target.value ? Number(e.target.value) : undefined }))
-                  }
+                  onChange={e => setSearchFilters(prev => ({ ...prev, maxTotal: e.target.value ? Number(e.target.value) : undefined }))}
                   placeholder="Max"
                 />
               </Col>
@@ -475,181 +511,191 @@ export const Order = () => {
         </Card>
       </Collapse>
 
-      <div className="table-responsive">
-        {orderList && orderList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th style={{ width: '50px' }}>
-                  <Input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    checked={selectedIds.length === orderList.length && orderList.length > 0}
-                  />
-                </th>
-                <th className="text-center" style={{ width: '80px' }}>
-                  STT
-                </th>
-                <th className="hand" onClick={sort('customerId')}>
-                  <Translate contentKey="order.customer">Customer</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('orderDate')}>
-                  <Translate contentKey="order.orderDate">Order Date</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('totalAmount')}>
-                  <Translate contentKey="order.totalAmount">Total Amount</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('status')}>
-                  <Translate contentKey="order.status">Status</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th className="hand" onClick={sort('paymentMethod')}>
-                  <Translate contentKey="order.paymentMethod">Payment Method</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {orderList.map((order, i) => {
-                const isEditing = editingId === order.id;
-                return (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
-                    <td>
+      <Card className="shadow-sm border-0" style={{ borderRadius: '12px' }}>
+        <CardBody className="p-0">
+          <div className="table-responsive">
+            {orderList && orderList.length > 0 ? (
+              <Table responsive hover className="mb-0">
+                <thead>
+                  <tr>
+                    <th style={{ width: '50px' }}>
                       <Input
                         type="checkbox"
-                        checked={selectedIds.includes(order.id as string)}
-                        onChange={() => handleSelectOne(order.id as string)}
-                        disabled={isEditing}
+                        onChange={handleSelectAll}
+                        checked={selectedIds.length === orderList.length && orderList.length > 0}
                       />
-                    </td>
-                    <td className="text-center">{formatIndex(i)}</td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedOrder?.customerId ?? ''}
-                          onChange={e => handleFieldChange('customerId', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : order.customerName ? (
-                        <Button tag={Link} to={`/customer/${order.customerId}`} color="link" size="sm">
-                          {order.customerName}
-                        </Button>
-                      ) : order.customerId ? (
-                        <Button tag={Link} to={`/customer/${order.customerId}`} color="link" size="sm">
-                          <Translate contentKey="order.actions.viewCustomer">View Customer</Translate>
-                        </Button>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="date"
-                          value={formatDateForInput(editedOrder?.orderDate ?? null)}
-                          onChange={e => handleFieldChange('orderDate', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : order.orderDate ? (
-                        <TextFormat type="date" value={order.orderDate} format={APP_DATE_FORMAT} />
-                      ) : null}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={editedOrder?.totalAmount ?? ''}
-                          onChange={e => handleFieldChange('totalAmount', e.target.value === '' ? undefined : Number(e.target.value))}
-                          bsSize="sm"
-                        />
-                      ) : order.totalAmount !== undefined && order.totalAmount !== null ? (
-                        `$${order.totalAmount.toFixed(2)}`
-                      ) : null}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="select"
-                          value={editedOrder?.status ?? ''}
-                          onChange={e => handleFieldChange('status', e.target.value)}
-                          bsSize="sm"
-                        >
-                          {ORDER_STATUSES.map(status => (
-                            <option value={status} key={status}>
-                              {status}
-                            </option>
-                          ))}
-                        </Input>
-                      ) : (
-                        <Badge color={getStatusBadgeColor(order.status)}>{order.status}</Badge>
-                      )}
-                    </td>
-                    <td>
-                      {isEditing ? (
-                        <Input
-                          type="text"
-                          value={editedOrder?.paymentMethod ?? ''}
-                          onChange={e => handleFieldChange('paymentMethod', e.target.value)}
-                          bsSize="sm"
-                        />
-                      ) : (
-                        order.paymentMethod
-                      )}
-                    </td>
-                    <td className="text-end">
-                      <div className="btn-group flex-btn-group-container">
-                        {isEditing ? (
-                          <>
-                            <Button color="success" size="sm" onClick={saveOrder} disabled={loading}>
-                              <FontAwesomeIcon icon="save" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.save">Save</Translate></span>
-                            </Button>
-                            <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
-                              <FontAwesomeIcon icon="times" />
-                              <span className="d-none d-md-inline"> <Translate contentKey="entity.action.cancel">Cancel</Translate></span>
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Button tag={Link} to={`/order/${order.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
-                            </Button>
-                            <Button
-                              color="primary"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityInlineEditButton"
-                              onClick={() => startEditing(order)}
-                            >
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
-                            </Button>
-                            <Button
-                              color="danger"
-                              size="sm"
-                              className="ms-2"
-                              data-cy="entityDeleteButton"
-                              onClick={() => void handleDelete(order)}
-                            >
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </td>
+                    </th>
+                    <th className="text-center" style={{ width: '80px' }}>
+                      STT
+                    </th>
+                    <th className="hand" onClick={sort('customerId')}>
+                      <Translate contentKey="order.customer">Customer</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('orderDate')}>
+                      <Translate contentKey="order.orderDate">Order Date</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('totalAmount')}>
+                      <Translate contentKey="order.totalAmount">Total Amount</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('status')}>
+                      <Translate contentKey="order.status">Status</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th className="hand" onClick={sort('paymentMethod')}>
+                      <Translate contentKey="order.paymentMethod">Payment Method</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th />
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="order.home.notFound">No Orders found</Translate>
-            </div>
-          )
-        )}
-      </div>
+                </thead>
+                <tbody>
+                  {orderList.map((order, i) => {
+                    const isEditing = editingId === order.id;
+                    return (
+                      <tr key={`entity-${i}`} data-cy="entityTable">
+                        <td>
+                          <Input
+                            type="checkbox"
+                            checked={selectedIds.includes(order.id as string)}
+                            onChange={() => handleSelectOne(order.id as string)}
+                            disabled={isEditing}
+                          />
+                        </td>
+                        <td className="text-center">{formatIndex(i)}</td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedOrder?.customerId ?? ''}
+                              onChange={e => handleFieldChange('customerId', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : order.customerName ? (
+                            <Button tag={Link} to={`/customer/${order.customerId}`} color="link" size="sm">
+                              {order.customerName}
+                            </Button>
+                          ) : order.customerId ? (
+                            <Button tag={Link} to={`/customer/${order.customerId}`} color="link" size="sm">
+                              <Translate contentKey="order.actions.viewCustomer">View Customer</Translate>
+                            </Button>
+                          ) : (
+                            '—'
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="date"
+                              value={formatDateForInput(editedOrder?.orderDate ?? null)}
+                              onChange={e => handleFieldChange('orderDate', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : order.orderDate ? (
+                            <TextFormat type="date" value={order.orderDate} format={APP_DATE_FORMAT} />
+                          ) : null}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="number"
+                              step="0.01"
+                              value={editedOrder?.totalAmount ?? ''}
+                              onChange={e => handleFieldChange('totalAmount', e.target.value === '' ? undefined : Number(e.target.value))}
+                              bsSize="sm"
+                            />
+                          ) : order.totalAmount !== undefined && order.totalAmount !== null ? (
+                            `$${order.totalAmount.toFixed(2)}`
+                          ) : null}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="select"
+                              value={editedOrder?.status ?? ''}
+                              onChange={e => handleFieldChange('status', e.target.value)}
+                              bsSize="sm"
+                            >
+                              {ORDER_STATUSES.map(status => (
+                                <option value={status} key={status}>
+                                  {status}
+                                </option>
+                              ))}
+                            </Input>
+                          ) : (
+                            <Badge color={getStatusBadgeColor(order.status)}>{order.status}</Badge>
+                          )}
+                        </td>
+                        <td>
+                          {isEditing ? (
+                            <Input
+                              type="text"
+                              value={editedOrder?.paymentMethod ?? ''}
+                              onChange={e => handleFieldChange('paymentMethod', e.target.value)}
+                              bsSize="sm"
+                            />
+                          ) : (
+                            order.paymentMethod
+                          )}
+                        </td>
+                        <td className="text-end">
+                          <div className="btn-group flex-btn-group-container">
+                            {isEditing ? (
+                              <>
+                                <Button color="success" size="sm" onClick={saveOrder} disabled={loading}>
+                                  <FontAwesomeIcon icon="save" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.save">Save</Translate>
+                                  </span>
+                                </Button>
+                                <Button color="secondary" size="sm" onClick={cancelEditing} className="ms-2">
+                                  <FontAwesomeIcon icon="times" />
+                                  <span className="d-none d-md-inline">
+                                    {' '}
+                                    <Translate contentKey="entity.action.cancel">Cancel</Translate>
+                                  </span>
+                                </Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button tag={Link} to={`/order/${order.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                                </Button>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityInlineEditButton"
+                                  onClick={() => startEditing(order)}
+                                >
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                                </Button>
+                                <Button
+                                  color="danger"
+                                  size="sm"
+                                  className="ms-2"
+                                  data-cy="entityDeleteButton"
+                                  onClick={() => void handleDelete(order)}
+                                >
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            ) : (
+              !loading && (
+                <div className="alert alert-warning m-4">
+                  <Translate contentKey="order.home.notFound">No Orders found</Translate>
+                </div>
+              )
+            )}
+          </div>
+        </CardBody>
+      </Card>
 
       {totalItems ? (
         <div className={orderList && orderList.length > 0 ? '' : 'd-none'}>

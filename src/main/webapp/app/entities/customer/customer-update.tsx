@@ -37,14 +37,22 @@ export const CustomerUpdate = () => {
   }, [updateSuccess]);
 
   const saveEntity = values => {
-    const entity = {
-      ...customerEntity,
-      ...values,
-    };
-
     if (isNew) {
+      // Remove ID and other fields that shouldn't be sent when creating new entity
+      const entity = {
+        ...customerEntity,
+        ...values,
+      };
+      // Remove fields that shouldn't be sent when creating
+      delete entity.id;
+      delete entity.createdDate;
+      delete entity.lastModifiedDate;
       dispatch(createEntity(entity));
     } else {
+      const entity = {
+        ...customerEntity,
+        ...values,
+      };
       dispatch(updateEntity(entity));
     }
   };
@@ -146,7 +154,14 @@ export const CustomerUpdate = () => {
                   maxLength: { value: 50, message: translate('entity.validation.maxlength', { max: 50 }) },
                 }}
               />
-              <ValidatedField label={translate('customer.active')} id="customer-active" name="active" data-cy="active" check type="checkbox" />
+              <ValidatedField
+                label={translate('customer.active')}
+                id="customer-active"
+                name="active"
+                data-cy="active"
+                check
+                type="checkbox"
+              />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/customer" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -169,4 +184,3 @@ export const CustomerUpdate = () => {
 };
 
 export default CustomerUpdate;
-
